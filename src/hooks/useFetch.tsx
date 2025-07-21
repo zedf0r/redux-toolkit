@@ -19,10 +19,7 @@ export const useFetch = ({ url, method, body }: TypeFetchParams) => {
       try {
         const options = {
           method,
-          headers: {
-            "Content-Type": "application/json",
-          },
-          ...(body ? { body: JSON.stringify(body) } : {}),
+          body: JSON.stringify(body),
         };
 
         const response = await fetch(url, options);
