@@ -1,0 +1,14 @@
+.input {
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 5px 10px;
+  width: 75%;
+  font-size: 18px;
+  font-family: sans-serif;
+}
+
+.box {
+  display: flex;
+  justify-content: center;
+  padding: 50px 0;
+}
