@@ -19,7 +19,6 @@ export const fetchApi = ({ url, method, body }: TypeFetchParams) => {
       if (response.status === 204) {
         return response;
       }
-      console.log(response);
 
       return response.json();
     })

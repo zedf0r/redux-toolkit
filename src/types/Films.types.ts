@@ -4,7 +4,7 @@ export type TypeFilmCardProps = {
   Year: string;
   Genre: string;
   Runtime: string;
-  Directory: string;
+  Director: string;
   Actors: string;
   imdbRating: string;
 };

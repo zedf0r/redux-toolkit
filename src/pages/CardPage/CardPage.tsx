@@ -1,22 +1,40 @@
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { fetchApi } from "../../api/fetchApi";
+import style from "./CardPage.module.css";
 import type { TypeFilmCardProps } from "../../types";
 
-export const CardPage = (props: TypeFilmCardProps) => {
+export const CardPage = () => {
+  const [data, setData] = useState<TypeFilmCardProps | null>(null);
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetchApi({
+      url: `http://www.omdbapi.com/?apikey=64405bd2&i=${id}`,
+      method: "GET",
+    }).then((response) => {
+      setData(response);
+    });
+  }, [id]);
+
   return (
-    <div className="card">
-      <div className="card__img">
-        <img src={props.Poster} alt="Постер" />
-      </div>
-      <div className="card__info">
-        <div className="card__info-title">
-          <h3>{props.Title}</h3>
+    <div className={style.container}>
+      <div className={style.card}>
+        <div className={style.card__img}>
+          <img className={style.img} src={data?.Poster} alt="Постер" />
         </div>
-        <div className="card__info-main">
-          <p>{props.Year}</p>
-          <p>{props.Genre}</p>
-          <p>{props.Runtime}</p>
-          <p>{props.Directory}</p>
-          <p>{props.Actors}</p>
-          <p>{props.imdbRating}</p>
+        <div className={style.card__info}>
+          <h3 className={style.title}>{data?.Title}</h3>
+
+          <div className={style.card__info_stats}>
+            <p>Year: {data?.Year}</p>
+            <p>Genre: {data?.Genre}</p>
+            <p>Runtime: {data?.Runtime}</p>
+            <p>Director: {data?.Director}</p>
+            <p>Actors: {data?.Actors}</p>
+            <p>imdbRating: {data?.imdbRating}</p>
+          </div>
         </div>
       </div>
     </div>

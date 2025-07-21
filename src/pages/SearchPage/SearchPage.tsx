@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
-import classes from "./SearchPage.module.css";
+import style from "./SearchPage.module.css";
+import { Link } from "react-router-dom";
 import { fetchApi } from "../../api/fetchApi";
 type TypeFilmData = {
   Poster: string;
   Title: string;
+  imdbID: string;
 };
 
 export const SearchPage = () => {
-  const [data, setData] = useState<TypeFilmData>({ Poster: "", Title: "" });
+  const [data, setData] = useState<TypeFilmData[] | null>(null);
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   const responseData = async (name: string) => {
     return fetchApi({
-      url: `http://www.omdbapi.com/?apikey=64405bd2&t=${name}`,
+      url: `http://www.omdbapi.com/?apikey=64405bd2&s=${name}`,
       method: "GET",
     })
       .then((response) => {
@@ -22,7 +24,9 @@ export const SearchPage = () => {
           setError(true);
           return;
         }
-        setData(response);
+
+        setData(response.Search);
+        console.log(data);
       })
       .finally(() => {
         setLoading(false);
@@ -35,10 +39,9 @@ export const SearchPage = () => {
         setLoading(true);
         setError(false);
         responseData(filter);
-      }, 1000);
-      console.log(`Привязался`);
+      }, 300);
+
       return () => {
-        console.log(`Отвязался`);
         clearTimeout(timer);
       };
     }
@@ -50,36 +53,46 @@ export const SearchPage = () => {
 
   const showComponent = () => {
     if (loading) {
-      return <p className={classes.loading}>Loading...</p>;
+      return <p className={style.loading}>Loading...</p>;
     }
     if (error) {
-      return <p className={classes.error}>Movie not found</p>;
+      return <p className={style.error}>Movie not found!</p>;
     }
 
     return (
-      <div className={classes.card}>
-        <div>
-          <img src={data.Poster} alt="Постер" />
-        </div>
+      <div className={style.container}>
+        {data?.map((film) => {
+          return (
+            <Link
+              key={film.imdbID}
+              to={`/${film.imdbID}`}
+              className={style.card}
+            >
+              <div className={style.imgBox}>
+                <img className={style.img} src={film.Poster} alt="Постер" />
+              </div>
 
-        <h2 className={classes.cardTitle}>{data.Title}</h2>
+              <h2 className={style.cardTitle}>{film.Title}</h2>
+            </Link>
+          );
+        })}
       </div>
     );
   };
 
   return (
     <>
-      <div className={classes.box}>
+      <div className={style.box}>
         <input
           type="text"
-          className={classes.input}
+          className={style.input}
           value={filter}
           onChange={(event) => {
             changeHandler(event);
           }}
         />
       </div>
-      {showComponent()}
+      {data ? showComponent() : ""}
     </>
   );
 };
