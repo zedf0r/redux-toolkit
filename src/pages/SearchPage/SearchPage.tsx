@@ -1,32 +1,33 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "./SearchPage.module.css";
-import { Link } from "react-router-dom";
 import { fetchApi } from "../../api/fetchApi";
-type TypeFilmData = {
-  Poster: string;
-  Title: string;
-  imdbID: string;
-};
+import { added } from "../../services/favoriteFilm/favoriteFilmSlice";
+import { Button, Card } from "../../components";
+import type { TypeFilmParams } from "../../types";
 
 export const SearchPage = () => {
-  const [data, setData] = useState<TypeFilmData[] | null>(null);
+  const [data, setData] = useState<TypeFilmParams[] | null>(null);
   const [filter, setFilter] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const timeoutRef = useRef<number | null>(null);
 
   const responseData = async (name: string) => {
+    setError(false);
+    setLoading(true);
     return fetchApi({
       url: `http://www.omdbapi.com/?apikey=64405bd2&s=${name}`,
       method: "GET",
     })
       .then((response) => {
         if (response.Response === "False") {
-          setError(true);
-          return;
+          throw Error("Movie not found!");
         }
 
         setData(response.Search);
-        console.log(data);
+      })
+      .catch(() => {
+        setError(true);
       })
       .finally(() => {
         setLoading(false);
@@ -34,17 +35,18 @@ export const SearchPage = () => {
   };
 
   useEffect(() => {
-    if (filter.length !== 0) {
-      const timer = setTimeout(() => {
-        setLoading(true);
-        setError(false);
-        responseData(filter);
-      }, 300);
-
-      return () => {
-        clearTimeout(timer);
-      };
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
     }
+    timeoutRef.current = setTimeout(() => {
+      responseData(filter);
+    }, 300);
+
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
   }, [filter]);
 
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,17 +65,11 @@ export const SearchPage = () => {
       <div className={style.container}>
         {data?.map((film) => {
           return (
-            <Link
-              key={film.imdbID}
-              to={`/${film.imdbID}`}
-              className={style.card}
-            >
-              <div className={style.imgBox}>
-                <img className={style.img} src={film.Poster} alt="Постер" />
-              </div>
-
-              <h2 className={style.cardTitle}>{film.Title}</h2>
-            </Link>
+            <Card key={film.imdbID} film={film}>
+              <Button action={added} film={film}>
+                В избранное
+              </Button>
+            </Card>
           );
         })}
       </div>

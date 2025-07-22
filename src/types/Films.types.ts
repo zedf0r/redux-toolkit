@@ -8,3 +8,9 @@ export type TypeFilmCardProps = {
   Actors: string;
   imdbRating: string;
 };
+
+export type TypeFilmParams = {
+  Poster: string;
+  Title: string;
+  imdbID: string;
+};

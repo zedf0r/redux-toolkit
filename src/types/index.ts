@@ -1,1 +1,1 @@
-export type { TypeFilmCardProps } from "./Films.types";
+export type { TypeFilmCardProps, TypeFilmParams } from "./Films.types";

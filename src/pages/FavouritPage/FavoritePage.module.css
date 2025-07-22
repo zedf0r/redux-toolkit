@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  row-gap: 10px;
+  column-gap: 10px;
+  align-items: center;
+  max-width: 1330px;
+  padding: 50px 15px 0;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}

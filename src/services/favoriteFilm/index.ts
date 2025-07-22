@@ -1,0 +1,1 @@
+export { favoriteFilmSlice } from "./favoriteFilmSlice";
