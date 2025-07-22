@@ -11,7 +11,7 @@ export const CardPage = () => {
 
   useEffect(() => {
     fetchApi({
-      url: `http://www.omdbapi.com/?apikey=64405bd2&i=${id}`,
+      url: `i=${id}`,
       method: "GET",
     }).then((response) => {
       setData(response);

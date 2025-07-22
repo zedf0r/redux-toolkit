@@ -1,31 +1,24 @@
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import style from "./Button.module.css";
-import type { TypeFilmParams } from "../../types";
-import type { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+// import type { TypeFilmParams } from "../../types";
+// import type { AppDispatch } from "../../services/store";
+// import type { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 
-type TypeButtonActions = {
-  action: ActionCreatorWithPayload<TypeFilmParams>;
-  film: TypeFilmParams;
+// type TypeButtonActions = {
+//   action: ActionCreatorWithPayload<TypeFilmParams>;
+//   film: TypeFilmParams;
+//   children: React.ReactNode;
+// };
+
+type TypeButtonProps = {
+  onClick: (event: React.MouseEvent) => void;
   children: React.ReactNode;
 };
 
-export const Button = ({ action, film, children }: TypeButtonActions) => {
-  const dispatch = useDispatch();
+export const Button = ({ onClick, children }: TypeButtonProps) => {
+  //   const dispatch: AppDispatch = useDispatch();
   return (
-    <button
-      type="button"
-      className={style.button}
-      onClick={(event) => {
-        event.preventDefault();
-        dispatch(
-          action({
-            imdbID: film.imdbID,
-            Title: film.Title,
-            Poster: film.Poster,
-          })
-        );
-      }}
-    >
+    <button type="button" className={style.button} onClick={onClick}>
       {children}
     </button>
   );

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import style from "./SearchPage.module.css";
 import { fetchApi } from "../../api/fetchApi";
 import { added } from "../../services/favoriteFilm/favoriteFilmSlice";
-import { Button, Card } from "../../components";
+import { Card } from "../../components";
 import type { TypeFilmParams } from "../../types";
 
 export const SearchPage = () => {
@@ -16,7 +16,7 @@ export const SearchPage = () => {
     setError(false);
     setLoading(true);
     return fetchApi({
-      url: `http://www.omdbapi.com/?apikey=64405bd2&s=${name}`,
+      url: `s=${name}`,
       method: "GET",
     })
       .then((response) => {
@@ -64,13 +64,7 @@ export const SearchPage = () => {
     return (
       <div className={style.container}>
         {data?.map((film) => {
-          return (
-            <Card key={film.imdbID} film={film}>
-              <Button action={added} film={film}>
-                В избранное
-              </Button>
-            </Card>
-          );
+          return <Card key={film.imdbID} film={film} action={added}></Card>;
         })}
       </div>
     );

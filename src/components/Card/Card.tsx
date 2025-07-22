@@ -1,14 +1,31 @@
 import { Link } from "react-router-dom";
 import style from "./Card.module.css";
 import type { TypeFilmParams } from "../../types";
+import { Button } from "../Button/Button";
+import type { ActionCreatorWithPayload } from "@reduxjs/toolkit";
+import { useAppDispatch } from "../../hooks/hooks";
 
-export const Card = ({
-  film,
-  children,
-}: {
+type TypeCardProps = {
   film: TypeFilmParams;
-  children: React.ReactNode;
-}) => {
+  action: ActionCreatorWithPayload<TypeFilmParams>;
+  type?: string;
+};
+
+export const Card = ({ film, action, type }: TypeCardProps) => {
+  const dispatch = useAppDispatch();
+  console.log(action);
+
+  const handleOnClick = (event: React.MouseEvent) => {
+    event.preventDefault();
+
+    dispatch(
+      action({
+        imdbID: film.imdbID,
+        Poster: film.Poster,
+        Title: film.Title,
+      })
+    );
+  };
   return (
     <Link to={`/${film.imdbID}`} className={style.card}>
       <div className={style.imgBox}>
@@ -16,7 +33,13 @@ export const Card = ({
       </div>
 
       <h2 className={style.cardTitle}>{film.Title}</h2>
-      {children}
+      <Button
+        onClick={(event) => {
+          handleOnClick(event);
+        }}
+      >
+        {type === "favorite" ? "Удалить" : "В избранное"}
+      </Button>
     </Link>
   );
 };

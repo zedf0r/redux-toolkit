@@ -10,7 +10,7 @@ export const fetchApi = ({ url, method, body }: TypeFetchParams) => {
     body: JSON.stringify(body),
   };
 
-  return fetch(url, options)
+  return fetch(`http://www.omdbapi.com/?apikey=64405bd2&${url}`, options)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`Ошибка: ${response.status}`);
