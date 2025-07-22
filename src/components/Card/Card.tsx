@@ -13,10 +13,10 @@ type TypeCardProps = {
 
 export const Card = ({ film, action, type }: TypeCardProps) => {
   const dispatch = useAppDispatch();
-  console.log(action);
 
   const handleOnClick = (event: React.MouseEvent) => {
     event.preventDefault();
+    event.stopPropagation();
 
     dispatch(
       action({

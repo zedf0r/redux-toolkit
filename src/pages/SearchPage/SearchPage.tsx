@@ -64,7 +64,7 @@ export const SearchPage = () => {
     return (
       <div className={style.container}>
         {data?.map((film) => {
-          return <Card key={film.imdbID} film={film} action={added}></Card>;
+          return <Card key={film.imdbID} film={film} action={added} />;
         })}
       </div>
     );
