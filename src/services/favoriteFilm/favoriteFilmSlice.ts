@@ -1,11 +1,11 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import type { TypeFilmParams } from "../../types";
 
-type TypeFilmState = {
+type TypeInitialState = {
   films: TypeFilmParams[];
 };
 
-const initialState: TypeFilmState = {
+const initialState: TypeInitialState = {
   films: [],
 };
 
